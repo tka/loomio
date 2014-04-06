@@ -203,14 +203,6 @@ class Group < ActiveRecord::Base
     end
   end
 
-  # def is_subgroup_of_hidden_parent?
-  #   is_subgroup? && parent.is_hidden?
-  # end
-
-  # def is_subgroup_of_visible_parent?
-  #   is_subgroup? && parent.is_visible?
-  # end
-
   def is_parent?
     parent_id.blank?
   end
