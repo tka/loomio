@@ -92,6 +92,8 @@ class DiscussionsController < GroupBaseController
 
     @closed_motions = @discussion.closed_motions
 
+    @voting_motions = @discussion.voting_motions
+
     @uses_markdown = current_user_or_visitor.uses_markdown?
 
     @activity = @discussion.activity.page(requested_or_first_unread_page).per(Discussion::PER_PAGE)
@@ -124,15 +126,10 @@ class DiscussionsController < GroupBaseController
   end
 
   def new_proposal
-    if @discussion.current_motion
-      redirect_to @discussion
-      flash[:notice] = "A current proposal already exists for this disscussion."
-    else
-      @motion = Motion.new
-      @motion.discussion = @discussion
-      @group = GroupDecorator.new(@discussion.group)
-      render 'motions/new'
-    end
+    @motion = Motion.new
+    @motion.discussion = @discussion
+    @group = GroupDecorator.new(@discussion.group)
+    render 'motions/new'
   end
 
   def show_description_history

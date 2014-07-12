@@ -6,22 +6,17 @@ class MotionsController < GroupBaseController
 
   def create
     @discussion = Discussion.find(params[:motion][:discussion_id])
-    if @discussion.current_motion
+    @motion = current_user.authored_motions.new(permitted_params.motion)
+    @group = GroupDecorator.new(@motion.group)
+    authorize! :create, @motion
+    if @motion.save
+      Measurement.increment('motions.create.success')
+      flash[:success] = t("success.proposal_created")
       redirect_to @discussion
-      flash[:error] = t(:"error.proposal_already_exists")
     else
-      @motion = current_user.authored_motions.new(permitted_params.motion)
-      @group = GroupDecorator.new(@motion.group)
-      authorize! :create, @motion
-      if @motion.save
-        Measurement.increment('motions.create.success')
-        flash[:success] = t("success.proposal_created")
-        redirect_to @discussion
-      else
-        Measurement.increment('motions.create.error')
-        flash[:warning] = t("warning.proposal_not_created")
-        render action: :new
-      end
+      Measurement.increment('motions.create.error')
+      flash[:warning] = t("warning.proposal_not_created")
+      render action: :new
     end
   end
 

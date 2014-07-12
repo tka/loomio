@@ -173,7 +173,7 @@ class Ability
     end
 
     can [:create], Motion do |motion|
-      motion.discussion.current_motion.nil? && user_is_member_of?(motion.discussion.group_id)
+      user_is_member_of?(motion.discussion.group_id)
     end
 
     can [:vote], Motion do |motion|

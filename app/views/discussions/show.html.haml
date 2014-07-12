@@ -49,13 +49,9 @@
                   %li.selector-item.empty-list-message#start-proposal-text
                     = t :empty_decision_list_html # should be "start a proposal"
 
-                - if @discussion.current_motion
-                  - if @motion == @discussion.current_motion
-                    %li.selector-item.current-proposal
-                      = render @motion
-                  - else
-                    %li.selector-item
-                      = render 'motions/motion_preview', motion: @discussion.current_motion
+                - if @voting_motions.any?
+                  - @voting_motions.each do |motion|
+                    %li.selector-item.current-proposal= render motion
 
             - if @closed_motions.any?
               #previous-proposals
